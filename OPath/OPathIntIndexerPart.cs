@@ -41,14 +41,14 @@ namespace OPath
 
 		public override object Evaluate(object sourceObject, string sourceOPath)
 		{
-			Type sourceObjectType = sourceObject.GetType();
+			var sourceObjectType = sourceObject.GetType();
 
-			MethodInfo indexerMethod = GetCachedValueMember(sourceObjectType) as MethodInfo;
+			var indexerMethod = GetCachedValueMember(sourceObjectType) as MethodInfo;
 
 			if (indexerMethod == null)
 			{
-				throw new OPathException(string.Format(
-					"{0} of type {1} does not have an int indexer", sourceOPath, sourceObjectType.FullName));
+				throw new OPathException(
+                    $"{sourceOPath} of type {sourceObjectType.FullName} does not have an int indexer");
 			}
 
 			// TODO: Get the last item if the index is negative
@@ -56,25 +56,26 @@ namespace OPath
 			try
 			{
 
-				object indexerValue = indexerMethod.Invoke(sourceObject, new object[] { this.IndexValue });
+				var indexerValue = indexerMethod.Invoke(sourceObject, new object[] { this.IndexValue });
 				return indexerValue;
 
 			}
 			catch (TargetInvocationException targetInvocationException)
 			{
-				Exception ex = targetInvocationException.InnerException;
+				var ex = targetInvocationException.InnerException;
 
-				if ((ex is ArgumentOutOfRangeException)
-					|| (ex is IndexOutOfRangeException))
-				{
-					throw new OPathException(string.Format(
-						"{0}[{1}] index out of range", sourceOPath, this.IndexValue));
-				}
+                if (ex != null)
+                {
+				    if ((ex is ArgumentOutOfRangeException)
+					    || (ex is IndexOutOfRangeException))
+				    {
+					    throw new OPathException($"{sourceOPath}[{this.IndexValue}] index out of range");
+				    }
+                }
 
-				throw new OPathException(string.Format(
-					"{0}[{1}] threw exception: {2}", sourceOPath, this.IndexValue, ex.Message), ex);
-			}
-		}
+                throw new OPathException($"{sourceOPath}[{this.IndexValue}] threw exception: {ex?.Message}", ex);
+            }
+        }
 
 
 		public override string ToString()
@@ -89,9 +90,9 @@ namespace OPath
 
 		protected override MemberInfo GetValueMember(Type sourceObjectType)
 		{
-			string indexerMethodName = sourceObjectType.IsArray ? "GetValue" : "get_Item";
+			var indexerMethodName = sourceObjectType.IsArray ? "GetValue" : "get_Item";
 
-			MethodInfo indexerMethod = sourceObjectType.GetMethod(indexerMethodName, new Type[] { typeof(int) });
+			var indexerMethod = sourceObjectType.GetMethod(indexerMethodName, new[] { typeof(int) });
 
 			return indexerMethod;
 		}
