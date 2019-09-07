@@ -28,10 +28,9 @@ namespace OPath.TestSuite
 		{
 			var expression = OPathExpression.Compile("MyVariable = 'OPath.NET'");
 
-			var document = new OPathDocument();
-			document.Add("MyVariable", "OPath.NET");
+            var document = new OPathDocument { { "MyVariable", "OPath.NET" } };
 
-			var navigator = OPathNavigator.CreateNavigator(document);
+            var navigator = OPathNavigator.CreateNavigator(document);
 
 			var result = navigator.Evaluate(expression);
 
@@ -43,10 +42,9 @@ namespace OPath.TestSuite
 		{
 			var expression = OPathExpression.Compile("MyVariable.Length = 0");
 
-			var document = new OPathDocument();
-			document.Add("MyVariable", null);
+            var document = new OPathDocument { { "MyVariable", null } };
 
-			var navigator = OPathNavigator.CreateNavigator(document);
+            var navigator = OPathNavigator.CreateNavigator(document);
 
 			try
 			{
@@ -87,18 +85,11 @@ namespace OPath.TestSuite
 		{
 			var expression = OPathExpression.Compile("StringArray[0].Length > Int");
 
-			var document = new OPathDocument();
-			document.Add("StringArray", new string[] { "String" });
-			document.Add("Int", 0);
+            var document = new OPathDocument { { "StringArray", new[] { "String" } }, { "Int", 0 } };
 
-			var navigator = OPathNavigator.CreateNavigator(document);
+            var navigator = OPathNavigator.CreateNavigator(document);
 
-			var result =
-				navigator.Evaluate(expression, OPathOptions.Defaults, null, 
-					new OPathNavigator.ValueLogger(delegate(string message)
-					{
-						Console.WriteLine(message);
-					}));
+			var result = navigator.Evaluate(expression, OPathOptions.Defaults, null, Console.WriteLine);
 
 			Console.WriteLine(result);
 		}
@@ -108,18 +99,12 @@ namespace OPath.TestSuite
 		{
 			var expression = OPathExpression.Compile("my-prefix:my-function(String, Int)");
 
-			var document = new OPathDocument();
-			document.Add("String", "String" );
-			document.Add("Int", 616);
+            var document = new OPathDocument { { "String", "String" }, { "Int", 616 } };
 
-			var navigator = OPathNavigator.CreateNavigator(document);
+            var navigator = OPathNavigator.CreateNavigator(document);
 
-			navigator.RegisterCustomFunction("my-prefix", "my-function", 
-				new OPathCustomFunction(delegate(object[] args) 
-					{
-						string[] stringArray = Array.ConvertAll<object, string>(args, delegate(object o) { return o + ""; });
-						return string.Join(",", stringArray);
-					}));
+			navigator.RegisterCustomFunction("my-prefix", "my-function",
+                args => string.Join(",", Array.ConvertAll(args, o => o + "")));
 
 			var result = navigator.Evaluate(expression);
 
