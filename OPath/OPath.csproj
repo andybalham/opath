@@ -1,7 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Andy Blackledge</Authors>
+    <Description>OPath is an object-based expression evaluator built using the core .NET XPath engine. It enables expressions to be evaluated at runtime in a loosely-typed, late-bound manner.</Description>
+    <RepositoryType>Git</RepositoryType>
+    <PackageProjectUrl>https://github.com/andybalham/opath</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/andybalham/opath.git</RepositoryUrl>
+    <PackageId>AndyBalham_OPath</PackageId>
   </PropertyGroup>
 
 </Project>
