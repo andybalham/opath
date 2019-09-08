@@ -28,12 +28,9 @@ namespace OPath.TestSuite
 
 		private class ExceptionThrower
 		{
-			public object Property
-			{
-				get { throw new InvalidOperationException("Property exception"); }
-			}
+			public object Property => throw new InvalidOperationException("Property exception");
 
-			public object Method()
+            public object Method()
 			{
 				throw new InvalidOperationException("Method exception");
 			}
@@ -80,16 +77,18 @@ namespace OPath.TestSuite
 		{
 			EMPTY_DICTIONARY = new Dictionary<string, string>();
 
-			NON_EMPTY_DICTIONARY = new Dictionary<string, string>();
-			NON_EMPTY_DICTIONARY.Add("Key1", "Value1");
-			NON_EMPTY_DICTIONARY.Add("Key2", "Value2");
-			NON_EMPTY_DICTIONARY.Add("Key3", "Value3");
+            NON_EMPTY_DICTIONARY = new Dictionary<string, string>
+            {
+                { "Key1", "Value1" }, { "Key2", "Value2" }, { "Key3", "Value3" }
+            };
 
-			NON_EMPTY_LIST_DICTIONARY = new Dictionary<string, List<string>>();
-			NON_EMPTY_LIST_DICTIONARY.Add("Key1", new List<string>(new string[] { "Value1" }));
-			NON_EMPTY_LIST_DICTIONARY.Add("Key2", new List<string>(new string[] { "Value2" }));
-			NON_EMPTY_LIST_DICTIONARY.Add("Key3", new List<string>(new string[] { "Value3" }));
-		}
+            NON_EMPTY_LIST_DICTIONARY = new Dictionary<string, List<string>>
+            {
+                { "Key1", new List<string>(new string[] { "Value1" }) },
+                { "Key2", new List<string>(new string[] { "Value2" }) },
+                { "Key3", new List<string>(new string[] { "Value3" }) }
+            };
+        }
 
 		#endregion
 
